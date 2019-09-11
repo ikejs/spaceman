@@ -1,5 +1,4 @@
 import random
-from threading import Timer
 
 def load_word():
     f = open('words.txt', 'r')
