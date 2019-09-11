@@ -21,6 +21,8 @@ def is_word_guessed(secret_word, letters_guessed):
 
 def get_guessed_word(secret_word, letters_guessed):
     display_word = []
+    print('letters guessed: ' + str(letters_guessed))
+    print('secret word: ' + secret_word)
     for letter in secret_word:
         if letter in letters_guessed:
             display_word.append(letter+' ')
@@ -36,13 +38,16 @@ def is_guess_in_word(guess, secret_word):
     if guess in secret_word:
         if guess in not_yet_guessed:
             not_yet_guessed.remove(guess)
+            letters_guessed.append(guess)
             return True
         elif guess not in not_yet_guessed:
             print('You already guessed that letter!')
     elif guess not in secret_word:
-         print('Sorry your guess was not in the word, try again')
-         print('You have ' + str(guesses_left) + ' incorrect guesses left')
-         return True
+        global guesses_left
+        guesses_left -= 1
+        print('Sorry your guess was not in the word, try again')
+        print('You have ' + str(guesses_left) + ' incorrect guesses left')
+        return True
     else:
         return False
 
@@ -50,7 +55,6 @@ def is_guess_in_word(guess, secret_word):
 
 
 def spaceman(secret_word):
-    print('76 - loaded word ' + secret_word)
     #TODO: show the player information about the game according to the project spec
     print('Welcome to Spaceman!')
     print('The secret word contains: ' + str(len(secret_word)) + ' letters.')
@@ -61,7 +65,7 @@ def spaceman(secret_word):
         if is_word_guessed(secret_word, letters_guessed):
             print('you win!')
         elif is_guess_in_word(guess, secret_word):
-            print(get_guessed_word(secret_word, letters_guessed))
+            print(''.join(get_guessed_word(secret_word, letters_guessed)))
     #TODO: Ask the player to guess one letter per round and check that it is only one letter
 
     #TODO: Check if the guessed letter is in the secret or not and give the player feedback
@@ -77,4 +81,3 @@ def spaceman(secret_word):
 
 #These function calls that will start the game
 spaceman(load_word())
-is_guess_in_word('a', 'apple')
