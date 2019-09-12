@@ -76,10 +76,12 @@ def spaceman(secret_word):
                 not_yet_guessed.remove(guess)
                 guesses_left -= 1
                 printFlush(get_guessed_word(secret_word, letters_guessed) + '\n')
-                if guesses_left == 0 and input("Do you want to play again? (Y/N): ").lower() == 'y':
-                    letters_guessed = []
-                    not_yet_guessed = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-                    spaceman(load_word())
+                if guesses_left == 0:
+                    print('Game Over! The word was: ' + secret_word)
+                    if input("Do you want to play again? (Y/N): ").lower() == 'y':
+                        letters_guessed = []
+                        not_yet_guessed = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+                        spaceman(load_word())
                 else:
                     print("You haven't guessed: " + ' '.join(not_yet_guessed) + '\n')
                     print('Sorry your guess was not in the word, try again!\n')
