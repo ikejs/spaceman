@@ -1,4 +1,12 @@
 import random
+import sys
+import time
+
+def printFlush(text):
+   for c in text:
+       print(c, end='')
+       sys.stdout.flush()
+       time.sleep(0.009)
 
 def load_word():
     f = open('words.txt', 'r')
@@ -42,42 +50,47 @@ def is_guess_in_word(guess, secret_word, not_yet_guessed):
 
 
 def spaceman(secret_word):
-    guesses_left = 7
+    guesses_left = len(secret_word)
     letters_guessed = []
     not_yet_guessed = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     #TODO: show the player information about the game according to the project spec
-    print(chr(27) + "[2J")
-    print('Welcome to Spaceman!')
-    print('The secret word contains: ' + str(len(secret_word)) + ' letters.')
-    print('You have ' + str(guesses_left) + ' incorrect guesses, please enter 1 letter per round.')
-    print(get_guessed_word(secret_word, letters_guessed))
+    printFlush(chr(27) + "[2J")
+    printFlush('Welcome to Spaceman!\n')
+    printFlush('The secret word contains: ' + str(len(secret_word)) + ' letters.\n')
+    printFlush('You have ' + str(guesses_left) + ' incorrect guesses, please enter 1 letter per round.\n')
+    printFlush(get_guessed_word(secret_word, letters_guessed) + '\n')
     while guesses_left > 0:
-        guess = raw_input('Enter a letter: ')
+        guess = input('\nEnter a letter: ')
+        # Error handle stretch challenge
         assert(len(guess) > 0), "Guess was empty!"
         print(chr(27) + "[2J")
         if guess not in letters_guessed:
-            if is_word_guessed(secret_word, letters_guessed):
-                print('You Win!')
-            elif is_guess_in_word(guess, secret_word, not_yet_guessed):
+            if is_guess_in_word(guess, secret_word, not_yet_guessed):
                 letters_guessed.append(guess)
                 not_yet_guessed.remove(guess)
-                print('You have ' + str(guesses_left) + ' incorrect guesses left')
-                print(get_guessed_word(secret_word, letters_guessed))
+                print("\nYou haven't guessed: " + ''.join(not_yet_guessed))
+                print('You have ' + str(guesses_left) + ' incorrect guesses left\n')
+                printFlush(get_guessed_word(secret_word, letters_guessed) + '\n')
             else:
                 letters_guessed.append(guess)
+                not_yet_guessed.remove(guess)
                 guesses_left -= 1
-                print('Sorry your guess was not in the word, try again!')
-                print('You have ' + str(guesses_left) + ' incorrect guesses left')
-                print(get_guessed_word(secret_word, letters_guessed))
-                if guesses_left == 0:
-                    print('Game Over! Restarting...')
-                    print('______________________________________')
-                    guesses_left = 7
+                printFlush(get_guessed_word(secret_word, letters_guessed) + '\n')
+                if guesses_left == 0 and input("Do you want to play again? (Y/N): ").lower() == 'y':
                     letters_guessed = []
                     not_yet_guessed = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
                     spaceman(load_word())
+                else:
+                    print("You haven't guessed: " + ' '.join(not_yet_guessed) + '\n')
+                    print('Sorry your guess was not in the word, try again!\n')
+                    print('You have ' + str(guesses_left) + ' incorrect guesses left\n')
+            if is_word_guessed(secret_word, letters_guessed):
+                printFlush('You Win!\n')
+                guesses_left = 0
         else:
-            print('Already guessed that!')
+            print('Already guessed that!\n')
+            print('You have ' + str(guesses_left) + ' incorrect guesses left\n')
+            printFlush(get_guessed_word(secret_word, letters_guessed) + '\n')
     #TODO: Ask the player to guess one letter per round and check that it is only one letter
 
     #TODO: Check if the guessed letter is in the secret or not and give the player feedback
