@@ -23,10 +23,14 @@ def is_word_guessed(secret_word, letters_guessed):
 
     pass
 
+def letter_been_guessed(letter, letters_guessed):
+    if letter in letters_guessed:
+        return True
+
 def get_guessed_word(secret_word, letters_guessed):
     display_word = []
     for letter in secret_word:
-        if letter in letters_guessed:
+        if get_guessed_word(letter, letters_guessed):
             display_word.append(letter+' ')
         else:
             display_word.append('_ ')
@@ -37,7 +41,6 @@ def get_guessed_word(secret_word, letters_guessed):
 
 
 def is_guess_in_word(guess, secret_word, not_yet_guessed):
-    # Check if the letter guess is in the secret word
     if guess in secret_word:
         if guess in not_yet_guessed:
             return True
@@ -53,7 +56,6 @@ def spaceman(secret_word):
     guesses_left = len(secret_word)
     letters_guessed = []
     not_yet_guessed = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-    #TODO: show the player information about the game according to the project spec
     printFlush(chr(27) + "[2J")
     printFlush('Welcome to Spaceman!\n')
     printFlush('The secret word contains: ' + str(len(secret_word)) + ' letters.\n')
@@ -93,18 +95,22 @@ def spaceman(secret_word):
             print('Already guessed that!\n')
             print('You have ' + str(guesses_left) + ' incorrect guesses left\n')
             printFlush(get_guessed_word(secret_word, letters_guessed) + '\n')
-    #TODO: Ask the player to guess one letter per round and check that it is only one letter
-
-    #TODO: Check if the guessed letter is in the secret or not and give the player feedback
-
-    #TODO: show the guessed word so far
-
-    #TODO: check if the game has been won or lost
 
 
 
 
 
 
-#These function calls that will start the game
-spaceman(load_word())
+
+#spaceman(load_word())
+
+def test_guessInWord():
+    assert is_guess_in_word('a', 'a', ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']), "Check for letter in word failed."
+
+def test_isWordGuessed():
+    assert is_word_guessed('apple', ['p', 'l', 'a', 'e'])
+
+def test_hasLetterBeenGuessed():
+    assert letter_been_guessed('a', ['a', 'b', 'c'])
+
+test_guessInWord()
